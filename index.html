@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- <div>
+    <input type="text" id="int">
+    <button id="but">send</button>
+  </div>--> 
+  <div class="data"></div>
+  <div class="block">
+    <p>User</p>
+    <input type="text" class="userName">
+    <p>password</p>
+    <input type="text" class="pass">
+    <button class="btn">send</button>
+  </div>
+  <div class="none">
+    <input type="text" class="type">
+    <button class="send">send</button>
+  </div>
+<script type="module">
+// Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-app.js";
+        import { getDatabase, set, update, ref ,push, child, onValue, get} from
+        "https://www.gstatic.com/firebasejs/9.6.2/firebase-database.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+    
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyDlmKx--kMF4Wo59AeOzCf-5XhNPaOBsGY",
+      authDomain: "chat-286c2.firebaseapp.com",
+      projectId: "chat-286c2",
+      storageBucket: "chat-286c2.appspot.com",
+      messagingSenderId: "1047026169847",
+      appId: "1:1047026169847:web:5c00213c513f076dfb20f2",
+      measurementId: "G-235Q42LNXR",
+      databaseURL: "https://chat-286c2-default-rtdb.europe-west1.firebasedatabase.app/"
+    };
+    
+    // // Initialize Firebase
+    // const app = initializeApp(firebaseConfig);
+    //     const database = getDatabase(app);
+    //     const starCountRef1 = ref(database, 'test');
+    //     onValue(starCountRef1, (snapshot) => {
+    //     snapshot.forEach(childSnapshot => {
+    //         // console.log(childSnapshot.val());
+    //         // const data = childSnapshot.val();
+    //         // const key = childSnapshot.key;
+    //         // let para = document.createElement("p");
+    //         // para.innerHTML = data + " " + key;
+    //         // para.id = "id" + key;
+    //         // document.querySelector('.data').appendChild(para);
+    //     })
+    //     let int = document.getElementById ("int")
+    //     let but = document.getElementById ("but")
+    //     but.addEventListener ("click", () =>{
+    //       update(ref(database, 'test/'), {
+    //     3:as,
+    //     })
+    // });
+    //   })
+    //   btn.addEventListener ("click", () => {
+    //     set(ref(database, 'users/' + userName.value), {
+    //   name: userName.value,
+    //   pass: pass.value,
+    //   })
+    //   })
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        const starCountRef1 = ref(database, 'test');
+    onValue(starCountRef1, (snapshot) => {
+        snapshot.forEach(childSnapshot => {
+            // console.log(childSnapshot.val());
+            // const data = childSnapshot.val();
+            // const key = childSnapshot.key;
+            // let para = document.createElement("p");
+            // para.innerHTML = data + " " + key;
+            // para.id = "id" + key;
+            // document.querySelector('.data').appendChild(para);
+        })
+    })
+
+    // update(ref(database, 'test/'), { 
+    //         3: "bye",
+    // });
+
+    const btn = document.querySelector(".btn");
+    const userName = document.querySelector(".userName");
+    const pass = document.querySelector(".pass");
+    const none = document.querySelector (".none");
+    const block = document.querySelector (".block")
+    let usersArray = [];
+    let passArray = [];
+
+    const starCountRef2 = ref(database, 'users');
+        onValue(starCountRef2, (snapshot) => {
+            snapshot.forEach(childSnapshot => {
+                console.log(childSnapshot.val().name);
+                usersArray.push(childSnapshot.val().name);
+                passArray.push(childSnapshot.val().pass)
+                console.log(usersArray);
+            })
+
+
+    btn.addEventListener("click", () => {
+        if (!usersArray.includes(userName.value)) {
+            set(ref(database, 'users/' + userName.value), {
+                        name: userName.value,
+                        pass: pass.value,
+                    })
+                    // none.classList.add("block");
+                    // block.classList.add("none");
+                    none.classList.add("block");
+                    none.classList.remove("none");
+                    block.classList.add("none");
+                    block.classList.remove("block");
+                    alert("ви зареєструвалися!");
+                    localStorage.setItem(userName.value, userName.value + pass.value);
+        } else {
+            const index = usersArray.indexOf(userName.value);
+
+            if (passArray[index] == pass.value) {
+                alert("ви увійшли!");
+                none.classList.add("block");
+                    none.classList.remove("none");
+                    block.classList.add("none");
+                    block.classList.remove("block");
+                    localStorage.setItem(userName.value, userName.value + "|" + pass.value);
+            } else {
+                alert("таке імя вже існує або неправильний пароль!");
+            }
+        }
+    })    
+})
+</script>
+</body>
+</html>
